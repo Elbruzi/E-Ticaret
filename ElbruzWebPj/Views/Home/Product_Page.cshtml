@@ -1,0 +1,326 @@
+﻿@model Product;
+
+@{
+    ViewData["Title"] = "Product_Page";
+    Layout = "~/Views/Shared/DefaultLayout.cshtml";
+}
+@{
+    decimal DiscountedPrice;
+    int ProductPercentage;
+
+    ProductPercentage = 100 - Model.Discount;
+    DiscountedPrice = Model.UnitPrice * ProductPercentage / 100;
+}
+
+<style>
+    /* === ÜRÜN DETAY SAYFASI (KARE & BASİT) === */
+    .product-detail-simple {
+        padding: 60px 0;
+        background-color: #000;
+    }
+
+    .simple-container {
+        display: flex;
+        gap: 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .simple-gallery {
+        width: 400px;
+        flex-shrink: 0;
+    }
+
+    .simple-main-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border: 1px solid #333;
+        background-color: #111;
+    }
+
+    .simple-thumbnails {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .simple-thumbnail {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border: 1px solid #333;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .simple-thumbnail:hover, .simple-thumbnail.active {
+            border-color: #FFD700;
+        }
+
+    .simple-info {
+        flex: 1;
+        color: #fff;
+    }
+
+    .simple-title {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #FFD700;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        line-height: 1.3;
+    }
+
+    .simple-price-box {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .simple-price {
+        font-size: 22px;
+        color: #FFD700;
+        font-weight: 600;
+    }
+
+    .simple-original-price {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 16px;
+    }
+
+    .simple-discount {
+        background-color: #FFD700;
+        color: #000;
+        padding: 3px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 3px;
+    }
+
+    .simple-rating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .simple-rating-stars {
+        color: #FFD700;
+        font-size: 14px;
+    }
+
+    .simple-rating-count {
+        color: #999;
+        font-size: 13px;
+    }
+
+    .simple-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .simple-meta-item {
+        display: flex;
+        gap: 8px;
+    }
+
+    .simple-meta-label {
+        color: #FFD700;
+        font-size: 13px;
+    }
+
+    .simple-meta-value {
+        color: #ccc;
+        font-size: 13px;
+    }
+
+    .simple-actions {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .simple-quantity {
+        display: flex;
+        border: 1px solid #333;
+        height: 45px;
+    }
+
+    .simple-quantity-btn {
+        width: 35px;
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+    }
+
+        .simple-quantity-btn:hover {
+            background: #222;
+        }
+
+    .simple-quantity-input {
+        width: 50px;
+        text-align: center;
+        background: transparent;
+        border: none;
+        border-left: 1px solid #333;
+        border-right: 1px solid #333;
+        color: #fff;
+        font-size: 14px;
+    }
+
+    .simple-add-to-cart {
+        background: #FFD700;
+        color: #000;
+        border: none;
+        padding: 0 25px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+    }
+
+        .simple-add-to-cart:hover {
+            opacity: 0.9;
+        }
+
+    .simple-buy-now {
+        background: transparent;
+        color: #FFD700;
+        border: 1px solid #FFD700;
+        padding: 0 25px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .simple-buy-now:hover {
+            background: #FFD700;
+            color: #000;
+        }
+
+    .simple-description {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #333;
+    }
+
+    .simple-description-title {
+        color: #FFD700;
+        font-size: 16px;
+        margin-bottom: 15px;
+        font-weight: 500;
+    }
+
+    .simple-description-content {
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+</style>
+
+<section class="product-detail-simple">
+    <div class="simple-container">
+        <div class="simple-gallery">
+
+                                    @*Ana Resim Kısmı*@
+            @* <img src="https://example.com/product-image.jpg" alt="Ürün Adı" class="simple-main-image" id="simple-main-image"> *@
+
+            <img src="@Url.Content("~/resimler/" + Model.PhotoPath)" alt="Ürün Adı" class="simple-main-image" id="simple-main-image" />
+
+
+            <div class="simple-thumbnails">
+
+                                @*İkncil Resimler Kısmı*@
+                @* <img src="https://example.com/thumbnail4.jpg" class="simple-thumbnail"> *@
+
+            </div>
+        </div>
+
+        <div class="simple-info">
+            <h1 class="simple-title">@Model.ProductName</h1>
+
+            <div class="simple-price-box">
+                <span class="simple-price">₺@DiscountedPrice</span>
+                <span class="simple-original-price">@Model.UnitPrice</span>
+                <span class="simple-discount">%@Model.Discount İNDİRİM</span>
+            </div>
+            <div class="simple-meta">
+                <div class="simple-meta-item">
+                    <span class="simple-meta-label">Stok:</span>
+                    <span class="simple-meta-value">Stokta Var</span>
+                </div>
+                <div class="simple-meta-item">
+                    <span class="simple-meta-label">Kargo:</span>
+                    <span class="simple-meta-value">Ücretsiz</span>
+                </div>
+                <div class="simple-meta-item">
+                    <span class="simple-meta-label">Renk:</span>
+                    <span class="simple-meta-value">@Model.Color</span>
+                </div>
+            </div>
+
+            <div class="simple-actions">
+                <a class="simple-add-to-cart" asp-action="CartProcces" asp-controller="Cart" asp-route-id="@Model.ProductID"
+                   style="height:40px; display:flex; align-items:center; justify-content:center;">
+                    SEPETE EKLE
+                </a>
+
+            </div>
+
+            <div class="simple-description">
+                <h3 class="simple-description-title">Ürün Açıklaması</h3>
+                <div class="simple-description-content">
+                   <p>@Model.Description </p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Thumbnail değiştirme fonksiyonu
+    document.addEventListener("DOMContentLoaded", function() {
+        const mainImage = document.getElementById('simple-main-image');
+        const thumbnails = document.querySelectorAll('.simple-thumbnail');
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                // Aktif thumbnail'i güncelle
+                thumbnails.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Ana resmi değiştir
+                mainImage.src = this.src;
+            });
+        });
+
+        // Miktar seçici fonksiyonelliği
+        const minusBtn = document.querySelector('.simple-quantity-btn.minus');
+        const plusBtn = document.querySelector('.simple-quantity-btn.plus');
+        const quantityInput = document.querySelector('.simple-quantity-input');
+
+        minusBtn.addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            if (value > 1) {
+                quantityInput.value = value - 1;
+            }
+        });
+
+        plusBtn.addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            quantityInput.value = value + 1;
+        });
+    });
+</script>

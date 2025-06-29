@@ -1,0 +1,189 @@
+﻿@model Supplier
+
+@{
+    ViewData["Title"] = "SupplierEdit";
+    Layout = "~/Views/Shared/AdminDefaultLayout.cshtml";
+}
+
+<div class="card">
+    <h2 class="card-title">Marka Güncelle</h2>
+    <form class="category-form" method="post">
+        <div class="form-group">
+            <label>Marka Adı</label>
+            <input type="text" asp-for="@Model.BrandName" class="form-input" placeholder="Marka İsmini Giriniz" required />
+        </div>
+
+        <div class="form-group">
+            <label>@Model.PhotoPath</label>
+            <div class="image-upload-container">
+                <!-- Dosya seçme butonu -->
+                <label for="categoryImage" class="upload-btn" >
+                    <input type="file" class="form-control" asp-for="@Model.PhotoPath">
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="categoryStatus">@Model.Active</label>
+            <select id="categoryStatus" class="form-select" asp-for="@Model.Active">
+                <option value="true">Aktif</option>
+                <option value="false">Pasif</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+
+            <button type="submit" class="btn-submit">Güncelle</button>
+
+            <a asp-action="Suppliers" asp-controller="Admin" class="btn-cancel">Geri dön</a>
+
+        </div>
+
+        <input hidden asp-for="@Model.SupplierID" />
+
+    </form>
+</div>
+
+<style>
+    .category-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+    .form-input, .form-select {
+        padding: 10px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        font-family: inherit;
+        transition: all 0.2s;
+    }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--border-color);
+        }
+
+    .checkbox-group {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-checkbox {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--accent-color);
+    }
+
+    .parent-category-group {
+        display: none;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .btn-submit, .btn-cancel {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-submit {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+    }
+
+        .btn-submit:hover {
+            background-color: rgba(74, 111, 165, 0.9);
+        }
+
+    .btn-cancel {
+        background-color: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+    }
+
+        .btn-cancel:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+
+
+    /* Resim Yükleme Alanı Stilleri */
+    .image-upload-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .image-preview {
+        width: 150px;
+        height: 150px;
+        border: 2px dashed var(--border-color);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .preview-image {
+        max-width: 100%;
+        max-height: 100%;
+        display: none;
+    }
+
+    .default-text {
+        color: var(--border-color);
+        font-size: 0.9rem;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .upload-btn {
+        padding: 8px 16px;
+        background-color: var(--accent-color);
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.2s;
+        width: fit-content;
+    }
+
+        .upload-btn:hover {
+            background-color: rgba(74, 111, 165, 0.9);
+        }
+</style>
+
+
+
+
+

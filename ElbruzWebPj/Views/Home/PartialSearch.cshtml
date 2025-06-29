@@ -1,0 +1,99 @@
+﻿@using ElbruzWebPj.Models.ViewModel;
+@model IEnumerable<VM_FetchProduct>
+
+<div class="Sproduct-list-container">
+	@if (Model != null && Model.Any())
+	{
+		<ul class="Sproduct-list">
+			@foreach (var item in Model)
+			{
+				<a asp-action="Product_Page" asp-controller="Home" asp-route-id="@item.Product_ID">
+				<li class="Sproduct-item">
+					<div class="Sproduct-image">
+						<img src="@Url.Content($"~/resimler/{item.Product_PhotoPath}")" alt="@item.Product_Name" style="margin-left: 140px"/>
+					</div>
+					<div class="Sproduct-info">
+						<span class="Sproduct-title" style="margin-right: 100px">@item.Product_Name</span>
+						<span class="Sproduct-price" style="margin-right: 100px">₺@item.Product_Price.ToString("N2")</span>
+					</div>
+				</li>
+				</a>
+			}
+		</ul>
+	}
+	else
+	{
+		<div class="Sproduct-list">
+			Listelemek için ürün bulunamadı.
+		</div>
+	}
+</div>
+
+<style>
+	.Sproduct-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		background-color: #121212; /* koyu siyah arka plan */
+		font-family: Arial, sans-serif;
+		color: #ddd;
+		font-size: 11px;
+	}
+
+	.Sproduct-item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 3px 6px;
+		border-bottom: 1px solid #333;
+		min-height: 80px;
+		cursor: pointer;
+		transition: background-color 0.2s ease-in-out;
+	}
+
+		.Sproduct-item:hover {
+			background-color: #1e1e1e;
+		}
+
+	.Sproduct-image {
+		width: 80px; /* büyütüldü */
+		flex-shrink: 0;
+	}
+
+		.Sproduct-image img {
+			width: 80px; /* genişlik artırıldı */
+			height: auto; /* yüksekliği orantılı */
+			object-fit: contain;
+			border-radius: 2px;
+		}
+
+	.Sproduct-info {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 2px;
+		flex: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font: 300px;
+	}
+
+	.Sproduct-title {
+		color: #eee;
+		font-weight: 600;
+		line-height: 1.1;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		align-self: center;
+	}
+
+	.Sproduct-price {
+		color: #ff5252; /* koyu temada öne çıkan kırmızı */
+		font-weight: 700;
+		font-size: 10px;
+		line-height: 1;
+		align-self: center;
+		margin: 10px;
+	}
+</style>

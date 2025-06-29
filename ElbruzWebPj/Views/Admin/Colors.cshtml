@@ -1,0 +1,220 @@
+﻿@model IEnumerable<ProductColor>
+
+@{
+    ViewData["Title"] = "Colors";
+    Layout = "~/Views/Shared/AdminDefaultLayout.cshtml";
+}
+
+<div>   
+
+<a class="btn-router" asp-controller="Admin" asp-action="ColorCreate"> Renk Yarat </a>
+
+	&nbsp;
+
+<a asp-action="Colors" asp-controller="Admin" class="btn-router">Yenile</a>
+
+</div>
+
+&nbsp;
+
+<div class="card">
+	<h2 class="card-title">Renkler</h2>
+
+	<div class="table-container">
+		<table class="minimal-table">
+			<thead>
+				<tr>
+					<th>@Html.DisplayNameFor(Model => Model.ColorID)</th>
+					<th>@Html.DisplayNameFor(Model => Model.Color)</th>
+					<th>Ayarlar</th>
+
+				</tr>
+
+			</thead>
+			<tbody>
+
+
+
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td> @Html.DisplayFor(Model => item.ColorID) </td>
+						<td> @Html.DisplayFor(Model => item.Color) </td>
+						<td> - </td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+</div>
+
+
+<style>
+
+	.btn-router {
+		background-color: rgba(76, 175, 80, 0.1);
+		color: #4CAF50;
+	}
+
+		.btn-router:hover {
+			background-color: rgba(76, 175, 80, 0.3);
+		}
+
+	.btn-router {
+		background-color: var(--accent-color);
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+		.btn-router:hover {
+			background-color: rgba(74, 111, 165, 0.8);
+		}
+
+	.table-container {
+		overflow-x: auto;
+		margin-bottom: 20px;
+	}
+
+	.minimal-table {
+		width: 100%;
+		border-collapse: collapse;
+		background-color: var(--card-bg);
+		border-radius: 6px;
+		overflow: hidden;
+	}
+
+		.minimal-table th {
+			background-color: rgba(74, 111, 165, 0.2);
+			color: var(--accent-color);
+			font-weight: 500;
+			text-align: left;
+			padding: 12px 15px;
+			border-bottom: 2px solid var(--accent-color);
+		}
+
+		.minimal-table td {
+			padding: 12px 15px;
+			border-bottom: 1px solid var(--border-color);
+			color: var(--text-color);
+		}
+
+		.minimal-table tr:last-child td {
+			border-bottom: none;
+		}
+
+		.minimal-table tr:hover {
+			background-color: rgba(120, 111, 165, 0.05);
+		}
+
+	.status {
+		display: inline-block;
+		padding: 4px 8px;
+		border-radius: 12px;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+
+
+	.actions {
+		white-space: nowrap;
+
+		gap: 8px;
+	}
+
+	.btn-edit, .btn-delete, .btn-add {
+		padding: 6px 12px;
+		font-size: 0.85rem;
+		vertical-align: middle; /* Butonları ortalamak için */
+		margin: 0; /* Kenar boşluklarını kaldır */
+	}
+
+	.btn-edit, .btn-delete {
+		padding: 6px 12px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.85rem;
+		transition: all 0.2s;
+	}
+
+	.btn-edit {
+		background-color: rgba(74, 111, 165, 0.1);
+		color: var(--accent-color);
+	}
+
+		.btn-edit:hover {
+			background-color: rgba(74, 111, 165, 0.3);
+		}
+
+	.btn-delete {
+		background-color: rgba(244, 67, 54, 0.1);
+		color: #F44336;
+	}
+
+		.btn-delete:hover {
+			background-color: rgba(244, 67, 54, 0.3);
+		}
+
+	.btn-add {
+		background-color: rgba(76, 175, 80, 0.1);
+		color: #4CAF50;
+	}
+
+		.btn-add:hover {
+			background-color: rgba(76, 175, 80, 0.3);
+		}
+
+
+	.table-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	.pagination {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.pagination-btn {
+		background-color: transparent;
+		border: 1px solid var(--border-color);
+		color: var(--text-color);
+		padding: 6px 12px;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+		.pagination-btn:hover {
+			background-color: rgba(74, 111, 165, 0.1);
+			border-color: var(--accent-color);
+		}
+
+	.page-number {
+		font-weight: 500;
+	}
+
+	.btn-add {
+		background-color: var(--accent-color);
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+		.btn-add:hover {
+			background-color: rgba(74, 111, 165, 0.8);
+		}
+
+</style>

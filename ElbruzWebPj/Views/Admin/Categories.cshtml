@@ -1,0 +1,368 @@
+﻿@model IEnumerable<Category>
+
+
+@{
+	ViewData["Title"] = "Categories";
+	Layout = "~/Views/Shared/AdminDefaultLayout.cshtml";
+}
+<div >
+
+	<a class="btn-router" asp-controller="Admin" asp-action="CategoryCreate"> Kategori Yarat </a>
+
+	&nbsp;
+
+	<a class="btn-router" asp-action="Categories" asp-controller="Admin" class="btn-cancel">Yenile</a>
+
+
+</div>
+
+	&nbsp;
+
+<div class="card">
+	<h2 class="card-title">Kategoriler</h2>
+
+	<div class="table-container">
+		<table class="minimal-table">
+			<thead>
+				<tr>
+					<th>@Html.DisplayNameFor(Model => Model.CategoryID)</th>
+					<th>@Html.DisplayNameFor(Model => Model.CategoryName)</th>
+					<th>@Html.DisplayNameFor(Model => Model.Active)</th>
+					<th>Ayarlar</th>
+				</tr>
+
+			</thead>
+			<tbody>
+
+
+
+				@foreach (var item in Model.Where(c => c.ParentID == 0 || c.ParentID == null))
+				{
+					<tr>
+						<td> @Html.DisplayFor(Model => item.CategoryID) </td>
+						<td> - @Html.DisplayFor(Model => item.CategoryName) </td>
+						<td>
+							@if (item.Active == true)
+							{
+								<span> ✅ </span>
+							}
+							else
+							{
+								<span> ❌ </span>
+							}
+						</td>
+
+						<td class="actions">
+							<a class="btn-edit" asp-action="CategoryEdit" asp-controller="Admin" asp-route-id="@item.CategoryID" > Düzenle </a>
+							@if (item.Active == false)
+							{
+
+								<button class="btn-add" data-id="@item.CategoryID">Ekle</button>
+
+							}
+							else
+							{
+
+								<button class="btn-delete" data-id="@item.CategoryID">Sil</button>
+
+							}
+						</td>
+					</tr>
+
+					@foreach (var subitem in Model)
+					{
+						if (item.CategoryID == subitem.ParentID)
+						{
+							<tr>
+								<td> @Html.DisplayFor(Model => subitem.CategoryID) </td>
+								<td> &nbsp; &nbsp; ↳ @Html.DisplayFor(Model => subitem.CategoryName) </td>
+								<td>
+
+									@if (subitem.Active == true)
+									{
+										<span> ✅ </span>
+									}
+									else
+									{
+										<span> ❌ </span>
+									}
+								</td>
+
+								<td class="actions">
+
+									<a class="btn-edit" asp-action="CategoryEdit" asp-controller="Admin" asp-route-id="@subitem.CategoryID" asp-route-Finder_ParentID="@subitem.ParentID"> Düzenle </a>
+
+
+									@if (subitem.Active == false)
+									{
+										<button class="btn-add" data-id="@subitem.CategoryID">  Ekle</button>
+
+									}
+									else
+									{
+										<button class="btn-delete" data-id="@subitem.CategoryID"> Sil </button>
+									}
+								</td>
+							</tr>
+						}
+					}
+
+				}
+			</tbody>
+		</table>
+	</div>
+
+</div>
+
+<style>
+	.table-container {
+		overflow-x: auto;
+		margin-bottom: 20px;
+	}
+
+	.minimal-table {
+		width: 100%;
+		border-collapse: collapse;
+		background-color: var(--card-bg);
+		border-radius: 6px;
+		overflow: hidden;
+	}
+
+		.minimal-table th {
+			background-color: rgba(74, 111, 165, 0.2);
+			color: var(--accent-color);
+			font-weight: 500;
+			text-align: left;
+			padding: 12px 15px;
+			border-bottom: 2px solid var(--accent-color);
+		}
+
+		.minimal-table td {
+			padding: 12px 15px;
+			border-bottom: 1px solid var(--border-color);
+			color: var(--text-color);
+		}
+
+		.minimal-table tr:last-child td {
+			border-bottom: none;
+		}
+
+		.minimal-table tr:hover {
+			background-color: rgba(120, 111, 165, 0.05);
+		}
+
+	.status {
+		display: inline-block;
+		padding: 4px 8px;
+		border-radius: 12px;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+
+
+	.actions {
+		display: flex;
+		gap: 8px;
+	}
+
+	.btn-edit, .btn-delete {
+		padding: 6px 12px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.85rem;
+		transition: all 0.2s;
+	}
+
+	.btn-router {
+		background-color: rgba(76, 175, 80, 0.1);
+		color: #4CAF50;
+	}
+
+		.btn-router:hover {
+			background-color: rgba(76, 175, 80, 0.3);
+		}
+
+	.btn-router {
+		background-color: var(--accent-color);
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+		.btn-router:hover {
+			background-color: rgba(74, 111, 165, 0.8);
+		}
+
+	
+
+	.btn-edit {
+		background-color: rgba(74, 111, 165, 0.1);
+		color: var(--accent-color);
+	}
+
+		.btn-edit:hover {
+			background-color: rgba(74, 111, 165, 0.3);
+		}
+
+	.btn-delete {
+		background-color: rgba(244, 67, 54, 0.1);
+		color: #F44336;
+	}
+
+		.btn-delete:hover {
+			background-color: rgba(244, 67, 54, 0.3);
+		}
+
+	.btn-add {
+		background-color: rgba(76, 175, 80, 0.1);
+		color: #4CAF50;
+	}
+
+		.btn-add:hover {
+			background-color: rgba(76, 175, 80, 0.3);
+		}
+
+
+	.table-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	.pagination {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.pagination-btn {
+		background-color: transparent;
+		border: 1px solid var(--border-color);
+		color: var(--text-color);
+		padding: 6px 12px;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+		.pagination-btn:hover {
+			background-color: rgba(74, 111, 165, 0.1);
+			border-color: var(--accent-color);
+		}
+
+	.page-number {
+		font-weight: 500;
+	}
+
+	.btn-add {
+		background-color: var(--accent-color);
+		color: white;
+		border: none;
+		padding: 8px 16px;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+		.btn-add:hover {
+			background-color: rgba(74, 111, 165, 0.8);
+		}
+
+</style>
+
+<script>
+		document.querySelectorAll('.btn-delete , .btn-add').forEach(button => {
+			button.addEventListener('click', () => {
+				const categoryID = button.dataset.id;
+
+				// 🔒 Önlem: butonu devre dışı bırak
+			button.disabled = true;
+			button.textContent = 'Bekleyin...';
+
+				fetch(`/Admin/Categories?id=${categoryID}`, {
+					method: 'POST'
+				})
+				.then(response => {
+					if (response.ok) {
+						// ✅ DOM manipülasyonu
+						const row = button.closest('tr');
+						const statusCell = row.querySelector('td:nth-child(3)');
+						const actionsCell = row.querySelector('.actions');
+
+						// Durum tersine çevrilecek
+						const isActive = button.classList.contains('btn-delete');
+
+						if (isActive) {
+							// Aktifti, pasif yap → ❌ göster
+							statusCell.innerHTML = '<span>❌</span>';
+							actionsCell.innerHTML = `
+								<a class="btn-edit" href="/Admin/CategoryEdit/${categoryID}">Düzenle</a>
+								<button class="btn-add" data-id="${categoryID}">Ekle</button>
+							`;
+						} else {
+							// Pasifti, aktif yap → ✅ göster
+							statusCell.innerHTML = '<span>✅</span>';
+							actionsCell.innerHTML = `
+								<a class="btn-edit" href="/Admin/CategoryEdit/${categoryID}">Düzenle</a>
+								<button class="btn-delete" data-id="${categoryID}">Sil</button>
+							`;
+						}
+
+						// Güncellenen butona tekrar event ekle (çünkü innerHTML yeniden oluşturdu)
+						addButtonListeners();
+					} else {
+						alert('Hata oluştu.');
+					}
+				});
+			});
+		});
+
+		function addButtonListeners() {
+			document.querySelectorAll('.btn-delete , .btn-add').forEach(button => {
+				// Önce var olan dinleyicileri kaldırmak gerekir (gerekirse removeEventListener kullanılabilir)
+				button.addEventListener('click', () => {
+					const categoryID = button.dataset.id;
+
+					fetch(`/Admin/Categories?id=${categoryID}`, {
+						method: 'POST'
+					})
+					.then(response => {
+						if (response.ok) {
+							const row = button.closest('tr');
+							const statusCell = row.querySelector('td:nth-child(3)');
+							const actionsCell = row.querySelector('.actions');
+							const isActive = button.classList.contains('btn-delete');
+
+							if (isActive) {
+								statusCell.innerHTML = '<span>❌</span>';
+								actionsCell.innerHTML = `
+									<a class="btn-edit" href="/Admin/CategoryEdit/${categoryID}">Düzenle</a>
+									<button class="btn-add" data-id="${categoryID}">Ekle</button>
+								`;
+							} else {
+								statusCell.innerHTML = '<span>✅</span>';
+								actionsCell.innerHTML = `
+									<a class="btn-edit" href="/Admin/CategoryEdit/${categoryID}">Düzenle</a>
+									<button class="btn-delete" data-id="${categoryID}">Sil</button>
+								`;
+							}
+
+							addButtonListeners(); // yeniden tetikle
+						}
+					});
+				});
+			});
+		}
+
+	// İlk başta da dinleyicileri ekle
+	addButtonListeners();
+</script>
+
+
+

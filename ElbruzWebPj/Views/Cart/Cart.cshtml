@@ -1,0 +1,255 @@
+﻿@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/DefaultLayout.cshtml";
+
+    var sepet = ViewBag.Sepetim as List<Cls_Order>; // veya IList<Cls_Order> de olabilir
+    int count = 0;
+    decimal? kdvdahil = 0;
+    int totalQuantity = 0;
+    decimal? totalUnitprice = 0;
+    decimal? kdvharic = 0;
+    decimal? totalkdv = 0;
+}
+
+<div class="minimal-cart">
+    <div class="cart-container">
+        @if (@ViewBag.Sepetim.Count > 0)
+        {
+            <h2 class="cart-title">Sepetiniz</h2>
+
+            <div class="cart-items">
+                @foreach (var item in ViewBag.Sepetim as IList<Cls_Order>)
+                {
+                    count++;
+                    totalQuantity += item.Quantity;
+
+                    decimal? birimKDV = (item.Kdv * item.UnitPrice) / 100;
+                    decimal? birimFiyatKDVDahil = item.UnitPrice + birimKDV;
+                    decimal? toplamFiyatKDVDahil = Math.Round(birimFiyatKDVDahil.Value * item.Quantity, 2);
+
+                    decimal? toplamFiyatKDVHaric = item.UnitPrice * item.Quantity;
+                    decimal? toplamKDV = toplamFiyatKDVDahil - toplamFiyatKDVHaric;
+
+                    kdvharic += toplamFiyatKDVHaric;
+                    totalkdv += toplamKDV;
+                    kdvdahil += toplamFiyatKDVDahil;
+
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="~/resimler/@item.PhotoPath" alt="@item.ProductName">
+                        </div>
+                        <div class="item-details">
+                            <h3>@item.ProductName</h3>
+                            <div class="item-meta">
+                                <span>@item.UnitPrice TL x @item.Quantity</span>
+                                <span>KDV: %@item.Kdv</span>
+                            </div>
+                        </div>
+
+                        <div class="item-price">
+                            @toplamFiyatKDVDahil TL
+                            <a href="@Url.Action("Cart", new { ProductID = item.ProductID})" class="remove-item">
+                                <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M18 6L6 18M6 6l12 12"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Toplam Adet:</span>
+                    <span>@totalQuantity</span>
+                </div>
+                <div class="summary-row">
+                    <span>Ara Toplam:</span>
+                    <span>@kdvharic TL</span>
+                </div>
+                <div class="summary-row">
+                    <span>KDV:</span>
+                    <span>@totalkdv TL</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Toplam:</span>
+                    <span>@kdvdahil TL</span>
+                </div>
+
+                <a href="@Url.Action("Order","Home")" class="checkout-button" style="height:40px; display:flex; align-items:center; justify-content:center;">
+                    Ödemeye Geç
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="empty-cart">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <h3>Sepetiniz Boş</h3>
+                <p>Alışverişe devam etmek için ürünlere göz atın</p>
+                <a href="/" class="continue-shopping">Alışverişe Devam Et</a>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .minimal-cart {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        color: #333;
+    }
+
+    .cart-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        color: #DFD0B8;
+        text-align: center;
+    }
+
+    .cart-items {
+        margin-bottom: 2rem;
+        background-color: #DFD0B8;
+        border-radius: 25px;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem 0;
+        gap: 1.5rem;
+    }
+
+    .item-image {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        margin-left: 25px
+    }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+    .item-details {
+        flex-grow: 1;
+    }
+
+        .item-details h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+    .item-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .item-price {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .remove-item {
+        color: red;
+        cursor: pointer;
+        transition: color 0.2s;
+        margin-right: 25px;
+        height: 25px;
+        width: 25px;
+        
+    }
+
+        .remove-item:hover {
+            color: darkred;
+        }
+
+    .cart-summary {
+        background: #948979;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-top: 2rem;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.8rem;
+        font-size: 0.95rem;
+    }
+
+        .summary-row.total {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+
+    .checkout-button {
+        display: block;
+        width: 100%;
+        height: 50px;
+        background: #222831;
+        color: white;
+        text-align: center;
+        margin-top: 1.5rem;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+        .checkout-button:hover {
+            background: #333;
+            color: white;
+            text-decoration: none;
+        }
+
+    .empty-cart {
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+        .empty-cart svg {
+            stroke-width: 1.5;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+
+        .empty-cart h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+    .continue-shopping {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #333;
+        transition: all 0.2s;
+    }
+
+        .continue-shopping:hover {
+            background: #f5f5f5;
+            text-decoration: none;
+        }
+</style>

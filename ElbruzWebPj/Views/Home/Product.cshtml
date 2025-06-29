@@ -1,0 +1,206 @@
+﻿@using ElbruzWebPj.Models.ViewModel;
+@model IEnumerable<VM_FetchProduct>;
+
+@{
+	ViewData["Title"] = "Product";
+	Layout = "~/Views/Shared/DefaultLayout.cshtml";
+}
+
+<!-- ÜRÜNLER -->
+<section class="products">
+	<div class="container">
+		<div class="section-title">
+			<h2>Öne Çıkanlar</h2>
+		</div>
+		<div class="product-grid">
+			@foreach (var item in Model.Where(m => m.Product_IsActive))
+			{
+				<div class="product-card" style="border-radius: 25px;">
+
+					<a asp-action="Product_Page" asp-controller="Home" style="text-align: center; margin: 40px 0;" class="CardColor" asp-route-id="@item.Product_ID">
+
+						<div class="product-img"  style="border-radius: 25px 25px 0px 0px;" >
+							<img src="~/resimler/@item.Product_PhotoPath"
+								 loading="lazy"
+								 width="300"
+								 height="300"
+								 alt="@item.Product_Name"
+								 class="product-image" />
+							<span class="product-badge">YENİ</span>
+						</div>
+						<div class="product-info">
+							<h3 class="product-title">@item.Product_Name</h3>
+							<div class="product-price">₺@item.Product_Price.ToString("N2")</div>
+						</div>
+						<div>
+							<a href="/home/CartProcess/@item.Product_ID" class="add-to-cart-button tooltip-container">
+								<i class="fa fa-shopping-cart"></i>
+								<span class="sr-only">Sepete Ekle</span> <span class="tooltip-text">Sepete Ekle</span>
+							</a>
+						</div>
+					</a>
+
+				</div>
+			}
+
+		</div>
+
+		<!-- ÜRÜN GETİR BUTONU -->
+		<div id="loadmoreProducts">
+			<div class="urun-getir-container" style="text-align: center; margin: 40px 0;">
+				<button class="urun-getir-btn" onclick="fetchMoreProducts()">DAHA FAZLA ÜRÜN GETİR</button>
+			</div>
+		</div>
+
+	</div>
+
+	<input type="hidden" id="category_Supplier_ID" value="@ViewBag.Category_Supplier_ID" />
+	<input type="hidden" id="fetchType" value="@ViewBag.FetchType" />
+
+</section>
+
+<style>
+
+	.add-to-cart-button {
+		margin-left: 170px;
+		margin-bottom: 20px;
+		position: relative; /* Tooltip için */
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border: 1px solid #333;
+		border-radius: 4px;
+		color: #333;
+		background-color: #7851A9;
+		text-decoration: none;
+		transition: all 0.2s ease-in-out;
+		overflow: hidden; /* Gizli metnin taşmasını önlemek için */
+	}
+
+		.add-to-cart-button:hover {
+			background-color: #FFA500;
+			color: #fff;
+			border-color: #333;
+		}
+
+		.add-to-cart-button i {
+			font-size: 20px;
+		}
+
+	/* Ekran okuyucu metni gizleme */
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
+
+	/* Tooltip stilleri */
+	.tooltip-text {
+		visibility: hidden;
+		width: auto;
+		background-color: #555;
+		color: #fff;
+		text-align: center;
+		border-radius: 4px;
+		padding: 5px 8px;
+		position: absolute;
+		z-index: 1;
+		bottom: 125%; /* İkonun üstünde görünmesi için */
+		left: 50%;
+		transform: translateX(-50%);
+		opacity: 0;
+		transition: opacity 0.3s, visibility 0.3s;
+		font-size: 12px;
+		white-space: nowrap; /* Metnin tek satırda kalması için */
+	}
+
+	.add-to-cart-button:hover .tooltip-text {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	.tooltip-text::after { /* Ok işareti */
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		margin-left: -5px;
+		border-width: 5px;
+		border-style: solid;
+		border-color: #555 transparent transparent transparent;
+	}
+
+	/* ÜRÜN GETİR BUTON STİLİ */
+	.urun-getir-btn {
+		background: transparent;
+		color: #fff;
+		border: 2px solid #fff;
+		padding: 14px 32px;
+		font-size: 16px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+		text-transform: uppercase;
+		letter-spacing: 1.5px;
+		border-radius: 0;
+		outline: none;
+		margin-top: 30px;
+	}
+
+		.urun-getir-btn:hover {
+			background: #fff;
+			color: #000;
+			box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+		}
+
+		.urun-getir-btn:active {
+			transform: scale(0.98);
+		}
+
+	.CardColor {
+		color: #fff;
+	}
+
+</style>
+
+
+
+<script>
+
+	let currentPage = 0;
+
+	function fetchMoreProducts() {
+		currentPage++;
+
+		const CatSupID = $("#category_Supplier_ID").val();
+		const type = $("#fetchType").val();
+
+		$.ajax({
+			type: "GET",
+			url: "/Home/LoadMore",
+			data: {
+				pageno: currentPage,
+				Category_Supplier_ID: CatSupID,
+				type: type
+			},
+			success: function (result) {
+				if (result.trim().length === 0) {
+					$("#loadmoreProducts").hide();
+				} else {
+					$(".product-grid").append(result);
+				}
+			}
+		});
+	}
+
+</script>
+
+

@@ -1,0 +1,32 @@
+﻿@using ElbruzWebPj.Models.ViewModel;
+@model IEnumerable<VM_FetchProduct>
+
+@foreach (var item in Model.Where(m => m.Product_IsActive == true))
+{
+	<div class="product-card" style="border-radius: 25px;">
+
+		<a asp-action="Product_Page" asp-controller="Home" style="text-align: center; margin: 40px 0 ;" class="CardColor" asp-route-id="@item.Product_ID">
+
+			<div class="product-img" style="border-radius: 25px 25px 0px 0px;">
+				<img src="~/resimler/@item.Product_PhotoPath"
+					 loading="lazy"
+					 width="300"
+					 height="300"
+					 alt="@item.Product_Name"
+					 class="product-image" />
+			</div>
+			<div class="product-info">
+				<h3 class="product-title">@item.Product_Name</h3>
+				<div class="product-price">₺@item.Product_Price.ToString("N2")</div>
+			</div>
+			<div>
+				<a href="/home/CartProcess/@item.Product_ID" class="add-to-cart-button tooltip-container">
+					<i class="fa fa-shopping-cart"></i>
+					<span class="sr-only">Sepete Ekle</span> <span class="tooltip-text">Sepete Ekle</span>
+				</a>
+			</div>
+
+		</a>
+
+	</div>
+}

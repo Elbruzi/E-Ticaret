@@ -1,0 +1,248 @@
+﻿@using ElbruzWebPj.Models.ViewModel;
+@inject IHttpContextAccessor Accessor;
+@model VM_HeaderDropDown;
+
+<header>
+    <div style="text-align:right;  height:9px;">
+
+        @{
+            var EmailInfo = Accessor.HttpContext.Session.GetString("Email");
+        }
+
+        <span style="color:white; margin-right:25px;">@EmailInfo</span>
+
+    </div>
+    <div class="container header-container">
+
+        <div class="logo col-md-12 col-lg-12">LUXEY</div>
+
+        <nav>
+            <ul>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Kategoriler <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content col-md-12 col-lg-12">
+                        @foreach (var item in Model.Categories.Where(c => c.ParentID == 0))
+                        {
+                            <div class="dropdown-submenu">
+
+                                <a asp-controller="Home" asp-action="Product" asp-route-id="@item.CategoryID" asp-route-type="@FetchType.Category" class="subdropbtn">
+                                    @item.CategoryName <i class="fas fa-chevron-right"></i>
+                                </a>
+
+                                @if (Model.Categories.Any(c => c.ParentID == item.CategoryID))
+                                {
+                                    <div class="dropdown-content-sub">
+                                        @foreach (var subitem in Model.Categories.Where(c => c.ParentID == item.CategoryID))
+                                        {
+                                            <a asp-controller="Home" asp-action="Product" asp-route-id="@subitem.CategoryID" asp-route-type="@FetchType.Category">
+                                                @subitem.CategoryName
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </li>
+
+                <li><a asp-controller="Home" asp-action="Index" >Ana Sayfa</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Markalar <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content col-md-12 col-lg-12">
+                        @foreach (var item in Model.Suppliers)
+                        {
+                            <a asp-controller="Home" asp-action="Product" asp-route-id="@item.SupplierID" asp-route-type="@FetchType.Supplier">
+                                @item.BrandName
+                            </a>
+                        }
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="header-icons">
+            @*   <a href="#"><i class="fas fa-search"></i></a> *@
+            <a asp-action="Cart" asp-controller="Cart"><i class="fas fa-shopping-bag"></i></a>
+            <a asp-action="ArtAndCulture" asp-controller="WebAPI">API</a>
+            @if (EmailInfo == null)
+            {
+                <a asp-controller="Account" asp-action="Login">Giriş</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Logout">Çıkış</a>
+            }
+        </div>
+    </div>
+
+
+
+    <div class="search-container">
+        <input type="text" placeholder="Ürün ara..." class="search-input" id="searchInput" autocomplete="off">
+        <div id="searchResults"></div>
+    </div>
+
+
+</header>
+
+<style>
+    /* Ana dropdown */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropbtn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #000;
+        min-width: 200px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+        z-index: 1000;
+        border: 1px solid #333;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 13px;
+            border-bottom: 1px solid #333;
+            transition: background-color 0.3s;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #111;
+                color: #FFD700;
+            }
+
+    .dropdown:hover > .dropdown-content {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* İç içe dropdown */
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .subdropbtn {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        color: #fff;
+        padding: 12px 16px;
+        text-decoration: none;
+        font-size: 13px;
+        border-bottom: 1px solid #333;
+    }
+
+    .dropdown-content-sub {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: 0;
+        background-color: #000;
+        min-width: 180px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        border: 1px solid #333;
+        z-index: 1001;
+    }
+
+    .dropdown-submenu:hover > .dropdown-content-sub {
+        display: block;
+    }
+
+    /* İkon animasyonları */
+    .dropdown:hover > .dropbtn i,
+    .dropdown-submenu:hover > .subdropbtn i {
+        transform: rotate(90deg);
+    }
+
+    .fa-chevron-down, .subdropbtn i {
+        transition: transform 0.3s;
+        font-size: 12px;
+    }
+
+    nav ul {
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+   
+
+.search-container {
+    width: 100%;
+    background: #000; /* Container arkaplanı */
+        height: 10px; /* İnce uzun */
+    }
+
+.search-input {
+        background: #2C2D2D !important; /* Gri arkaplan */
+    border: none !important; /* Kenarlık kaldırma */
+    height: 20px; /* İnce uzun */
+        width: 100%;
+        color: white;
+        text-align: center;
+        
+        
+    }
+</style>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function debounce(fn, delay) {
+        let timer = null;
+        return function () {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, arguments), delay);
+        };
+    }
+
+    $(document).ready(function () {
+        $('#searchInput').on('input', debounce(function () {
+            const query = $(this).val().trim();
+
+            if (query.length < 2) {
+                $('#searchResults').empty();
+                return;
+            }
+
+            $('#searchResults').html('<div>Yükleniyor...</div>');
+
+            $.ajax({
+                url: '@Url.Action("Search", "Home")',
+                type: 'GET',
+                data: { Text: query },
+                success: function (html) {
+                    $('#searchResults').html(html);
+                },
+                error: function () {
+                    $('#searchResults').html('<p>Arama sırasında hata oluştu.</p>');
+                }
+            });
+        }, 300));
+    });
+</script>

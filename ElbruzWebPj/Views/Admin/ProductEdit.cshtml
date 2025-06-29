@@ -1,0 +1,220 @@
+﻿@using ElbruzWebPj.Models.ViewModel;
+@model VM_Product;
+
+@{
+    ViewData["Title"] = "ProductEdit";
+    Layout = "~/Views/Shared/AdminDefaultLayout.cshtml";
+}
+
+
+<div class="card">
+
+
+
+    <h2 class="card-title">Ürün Güncelleme </h2>
+
+    <form class="category-form" method="post">
+
+        <div class="form-group">
+            <label>Ürün Adı</label>
+            <input type="text" asp-for="Product.ProductName" class="form-input" placeholder="@Model.Product.ProductName" required />
+
+
+        </div>
+
+        <div class="form-group">
+
+            <div class="Numbers">
+
+                <label>Ürün Fiyatı</label>
+                <input type="number" asp-for="Product.UnitPrice" class="form-input" placeholder="@Model.Product.UnitPrice" required maxlength="9">
+
+                &nbsp; &nbsp; &nbsp; &nbsp;
+
+                <label> Stok </label>
+                <input type="number" asp-for="Product.Stock" class="form-input" placeholder="@Model.Product.Stock" required maxlength="9" />
+
+                &nbsp; &nbsp; &nbsp; &nbsp;
+
+                <label> KDV </label>
+                <input type="number" asp-for="Product.KDV" class="form-input" placeholder="@Model.Product.KDV" required maxlength="3" />
+
+                &nbsp; &nbsp; &nbsp; &nbsp;
+
+                <label> İndirim </label>
+                <input type="number" asp-for="Product.Discount" class="form-input" placeholder="@Model.Product.Discount" required maxlength="3" />
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <div class="Numbers">
+
+                <label>Kategori Resmi</label>
+                <div class="image-upload-container">
+                    <!-- Dosya seçme butonu -->
+                    <label for="categoryImage" class="upload-btn">
+                        <input type="file" class="form-control" asp-for="@Model.Product.PhotoPath" placeholder="@Model.Product.PhotoPath">
+                    </label>
+
+                    &nbsp; &nbsp; &nbsp; &nbsp &nbsp; &nbsp;
+
+                    <label>Size</label>
+                    <input type="text" asp-for="Product.Size" class="form-input" placeholder="@Model.Product.Size" required>
+
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+
+
+                    <label for="categoryStatus">Durum</label>
+                    <select id="categoryStatus" class="form-select" asp-for="@Model.Product.Active">
+                        <option value="true">Aktif</option>
+                        <option value="false">Pasif</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <label for="parentCategory">Kategori Seçiniz</label>
+            <select asp-for="Product.CategoryID" class="form-select">
+                <option value="@Model.Product.CategoryID"> @Model.CategoryName </option>
+                @foreach (var item in Model.Categories )
+                {
+                    <option value="@item.CategoryID">@item.CategoryName</option>
+                }
+            </select>
+
+            <label for="parentCategory">Marka Seçiniz</label>
+            <select asp-for="Product.SupplierID" class="form-select">
+                <option value="@Model.Product.SupplierID"> @Model.SupplierName </option>
+                @foreach (var item in Model.Suppliers)
+                {
+                    <option value="@item.SupplierID"> @item.BrandName </option>
+                }
+            </select>
+
+            <label for="parentCategory">Renk Seçiniz</label>
+            <select asp-for="Product.Color" class="form-select">
+                @foreach (var item in Model.colors)
+                {
+                    <option value="@item.Color">@item.Color</option>
+                }
+            </select>
+
+
+
+            <div class="form-group">
+
+                <label>Ürün Açıklaması</label>
+                <textarea style="font-style:unset" backgro rows="4" cols="50" asp-for="Product.Description">
+                </textarea>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button type="submit" class="btn-submit">Ürün Güncelle</button>
+
+                <a asp-action="Products" asp-controller="Admin" class="btn-cancel">Geri dön</a>
+
+            </div>
+
+            <input hidden asp-for="Product.ProductID" value="@Model.Product.ProductID" />
+
+    </form>
+</div>
+
+
+
+
+<style>
+    .category-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+    .form-input, .form-select {
+        padding: 10px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        font-family: inherit;
+        transition: all 0.2s;
+    }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--border-color);
+        }
+
+    .checkbox-group {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-checkbox {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--accent-color);
+    }
+
+    .parent-category-group {
+        display: none;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .btn-submit, .btn-cancel {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-submit {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+    }
+
+        .btn-submit:hover {
+            background-color: rgba(74, 111, 165, 0.9);
+        }
+
+    .btn-cancel {
+        background-color: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+    }
+
+        .btn-cancel:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+</style>

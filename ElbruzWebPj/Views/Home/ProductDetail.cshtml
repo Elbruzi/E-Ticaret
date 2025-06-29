@@ -1,0 +1,45 @@
+﻿@using ElbruzWebPj.Models.ViewModel;
+@model IEnumerable<VM_FetchProduct>;
+
+@{
+    ViewData["Title"] = "ProductDetail";
+    Layout = "~/Views/Shared/DefaultLayout.cshtml";
+}
+
+<!-- ÜRÜNLER -->
+<section class="products">
+    <div class="container">
+        <div class="section-title">
+            <h2>  </h2>
+        </div>
+        <div class="product-grid">
+            @foreach (var item in Model.Where(m => m.Product_IsActive))
+            {
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="~/resimler/@item.Product_PhotoPath"
+                                 loading="lazy"
+                                 width="300"
+                                 height="300"
+                                 alt="@item.Product_Name"
+                                 class="product-image" />
+                            <span class="product-badge">YENİ</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">@item.Product_Name</h3>
+                            <div class="product-price">₺@item.Product_Price.ToString("N2")</div>
+                        </div>
+                    </div>
+            }
+
+        </div>
+
+        <!-- ÜRÜN GETİR BUTONU -->
+        <div id="loadmoreProducts">
+            <div class="urun-getir-container" style="text-align: center; margin: 40px 0;">
+            <button class="urun-getir-btn" onclick="fetchMoreProducts()">DAHA FAZLA ÜRÜN GETİR</button>
+        </div>
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,243 @@
+﻿@using ElbruzWebPj.Models.ViewModel;
+@model VM_Product
+
+@{
+    ViewData["Title"] = "ProductDetails";
+    Layout = "~/Views/Shared/AdminDefaultLayout.cshtml";
+}
+
+
+
+
+<div class="card">
+    <h2 class="card-title">Ürün Detayları</h2>
+    
+    <div class="product-detail-container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="img">
+                    <img src="~/resimler/@Model.Product.PhotoPath" alt="@Model.Product.ProductName" class="product-image" />
+                  
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="product-info">
+                    <h3>@Model.Product.ProductName</h3>
+                    
+                    <div class="detail-item">
+
+                        <span class="detail-label">Ürün Kodu:</span>
+                        <span class="detail-value">@Model.Product.ProductID</span>
+
+                        <span class="detail-label">Ürün İsmi:</span>
+                        <span class="detail-value">@Model.Product.ProductName</span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Kategori ID :</span>
+                        <span class="detail-value">@Model.Product.CategoryID</span>
+
+                        <span class="detail-label">Kategori:</span>
+                        <span class="detail-value">@Model.CategoryName</span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Marka ID :</span>
+                        <span class="detail-value">@Model.Product.SupplierID</span>
+
+                        <span class="detail-label">Marka :</span>
+                        <span class="detail-value">@Model.SupplierName</span>
+
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Fiyat:</span>
+                        <span class="detail-value">@Model.Product.UnitPrice</span>
+
+                        <span class="detail-label">İndirim :</span>
+                        <span class="detail-value">@Model.Product.Discount</span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">KDV :</span>
+                        <span class="detail-value">@Model.Product.KDV</span>
+
+                        <span class="detail-label">Stok Miktarı:</span>
+                        <span class="detail-value">@Model.Product.Stock</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Size :</span>
+                        <span class="detail-value">@Model.Product.Size</span>
+
+                        <span class="detail-label">KDV :</span>
+                        <span class="detail-value">@Model.Product.Color</span>
+                    </div>
+
+                    &nbsp;
+
+                    <div class="detail-item" style="border: outset;">
+                        &nbsp;
+
+                        <span class="detail-label">Açıklama:</span>
+                        <p class="detail-value">@Model.Product.Description</p>
+
+                        &nbsp;
+
+                    </div>
+                     
+                    &nbsp;
+
+                    <div class="detail-item">
+                        <span class="detail-label">Durum:</span>
+                        <span class="detail-value">
+                            @if (Model.Product.Active)
+                            {
+                                <span class="badge badge-success">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Pasif</span>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        &nbsp;
+
+        <div>
+            <a asp-action="Products" asp-controller="Admin" class="btn-router">Geri dön</a>
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+    .btn-router {
+        background-color: rgba(76, 175, 80, 0.1);
+        color: #4CAF50;
+    }
+
+        .btn-router:hover {
+            background-color: rgba(76, 175, 80, 0.3);
+        }
+
+    .btn-router {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-router:hover {
+            background-color: rgba(74, 111, 165, 0.8);
+        }
+
+    .img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+    }
+
+    .product-detail-container {
+        padding: 20px;
+    }
+    
+    .product-image-container {
+        width: 100%;
+        height: 300px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+    
+    .product-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+    
+    .no-image {
+        color: #6c757d;
+        font-size: 1.2rem;
+    }
+    
+    .product-info {
+        padding: 0 20px;
+    }
+    
+    .detail-item {
+        margin-bottom: 15px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        min-width: 150px;
+        color: var(--accent-color);
+    }
+    
+    .detail-value {
+        flex: 1;
+    }
+    
+    .badge {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    
+    .badge-success {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .badge-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .btn-secondary {
+        background-color: var(--border-color);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+    }
+    
+    .btn-secondary:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .right {
+        position: absolute;
+        right: 150px;
+        width: 300px;
+        padding: 10px;
+    }
+
+</style>

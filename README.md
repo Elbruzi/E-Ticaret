@@ -8,7 +8,8 @@ Basit, admin paneli olan, ürünleri optimize şekilde getiren e-ticaret sitesi.
 - Dependency Injection (DI - Bağımlılık Enjeksiyonu)  
 - Repository Pattern (Depo Tasarımı)  
 - Asynchronous Programming (async/await - Asenkron Programlama)  
-- Model Binding & Validation (Model Bağlama ve Doğrulama)  
+- Model Binding & Validation (Model Bağlama ve Doğrulama)
+- Microsoft SQL/T-SQL , LINQ
 - ViewModel Usage (MVVM)  
 - Route Constraints (Yönlendirme Kısıtlamaları)  
 - TempData Messaging (TempData ile Mesajlaşma)  

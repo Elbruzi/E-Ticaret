@@ -16,3 +16,4 @@ Basit, admin paneli olan, ürünleri optimize şekilde getiren e-ticaret sitesi.
 - Object-Relational Mapping (ORM) / Entity Framework Core  
 - Data Transfer Objects (DTOs) / View Models (Veri Transfer Nesneleri / Görünüm Modelleri)  
 - External API Integration (Harici API Entegrasyonu)
+- Lazy loading
